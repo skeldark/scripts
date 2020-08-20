@@ -72,7 +72,6 @@ function set_deities ()
             count_needs = 0
             needs =  unit.status.current_soul.personality.needs
             hf = df.historical_figure.find(unit.hist_figure_id)    
-            
             failed = 0
             for j = #needs-1,0,-1 do
                 if needs[j].id == 2 then
@@ -85,6 +84,7 @@ function set_deities ()
                                         hf.histfig_links[k]:delete()
                                         hf.histfig_links:erase(k)
                                         found = 1
+										needs[j]:delete()
                                         needs:erase(j)
                                         break
                                     end
