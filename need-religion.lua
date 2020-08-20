@@ -84,7 +84,7 @@ function set_deities ()
                                         hf.histfig_links[k]:delete()
                                         hf.histfig_links:erase(k)
                                         found = 1
-										needs[j]:delete()
+					needs[j]:delete()
                                         needs:erase(j)
                                         break
                                     end
