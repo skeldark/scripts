@@ -59,16 +59,20 @@ function fulfill()
     local patchcount = 0;
     for i, unit in ipairs(citizen) do
         local need = find_need(unit,friend_need_id)
-        if (need ~= nil ) then  
-            need.focus_level = 0 
-            need.need_level = 1
-            patchcount = patchcount +1
+        if (need ~= nil ) then 
+			if ( need.focus_level < -1000) then 
+                need.focus_level = 0 
+                need.need_level = 1
+                patchcount = patchcount +1
+			end
         end
         need = find_need(unit,family_need_id)
         if (need ~= nil ) then  
-            need.focus_level = 0 
-            need.need_level = 1
-            patchcount = patchcount +1
+		    if ( need.focus_level < -1000) then 
+                need.focus_level = 0 
+                need.need_level = 1
+                patchcount = patchcount +1
+			end
         end
         
     end
