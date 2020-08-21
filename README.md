@@ -1,5 +1,4 @@
-# scripts
-DFHack script: Fair Needs 
+# DFHack script: Fair Needs 
 
 Version: 0.9 BETA
 Download: https://github.com/skeldark/scripts/tree/master
