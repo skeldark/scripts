@@ -2,6 +2,7 @@
 -- ver 0.9
 -- Change the Preference of Food to a more broader range
 -- 
+--
 
 local utils=require('utils')
 
@@ -10,7 +11,8 @@ validArgs = utils.invert({
     'undo',
 	'list'
 })
-
+local seed = false
+local pss_counter=21416926
 local args = utils.processArgs({...}, validArgs)
 
 local helpme = [===[
@@ -25,10 +27,8 @@ PLANT
 FISH
 [SEED] DEFAULT = off
 
-Does not overwrite old modding on rerun!
 
 arguments:
-
     -help 
         Display this text
     -undo
@@ -41,23 +41,42 @@ arguments:
 		Does not change them
 ]===]
 
+--######
+--Helper
+--######
 
---get all citizen
-
-local seed = false
+function getAllCititzen()
 local citizen = {}
 local my_civ = df.global.world.world_data.active_site[0].entity_links[0].entity_id
 for n, unit in ipairs(df.global.world.units.all) do
-    if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
-        if unit.profession ~= df.profession.BABY  then
-            table.insert(citizen, unit)
+        if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
+            if unit.profession ~= df.profession.BABY and unit.profession ~= df.profession.CHILD then
+                table.insert(citizen, unit)
+            end
         end
+end
+return citizen
+end
+local citizen = getAllCititzen()
+
+function findNeed(unit,need_id) 
+    local needs =  unit.status.current_soul.personality.needs
+    local need_index = -1
+    for k = #needs-1,0,-1 do
+        if needs[k].id == need_id then
+            need_index = k
+            break
+        end
+    end    if (need_index ~= -1 ) then 
+        return needs[need_index]
     end
+    return nil
 end
 
-
-local pss_counter=21416926
-        
+--######
+--Main
+--######
+   
 function modded( unit) 
     for i, pref in ipairs(unit.status.current_soul.preferences) do
         if ( pref.prefstring_seed == pss_counter) then
@@ -138,7 +157,7 @@ function selectFood()
             utils.insert_or_update(unit.status.current_soul.preferences, { new = true, type = 2 , item_type = itype , creature_id = itype , color_id = itype , shape_id = itype , plant_id = itype , item_subtype = 1 , mattype = -1 , matindex = -1 , active = true, prefstring_seed = pss_counter }, 'prefstring_seed')
         end
     end
-    dfhack.println("need-goodmeal | ".. counter .. " citizen patched!") 
+    dfhack.println("need-goodmeal | Patched: ".. counter) 
 end
 
 if (args.help) then 

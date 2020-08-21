@@ -2,6 +2,7 @@
 -- ver 0.9
 -- Assign existing Trinkets to Citizen for them to collect
 -- to fulfill their Acquire Object Need.
+--
 
 local utils=require('utils')
 
@@ -9,10 +10,9 @@ validArgs = utils.invert({
     'help',
     't'
 })
-
 local args = utils.processArgs({...}, validArgs)
-
-
+local aquire_need_id = 20 
+local aquire_threshold = -1000
 local helpme = [===[
 Assign existing trinkets to citizen for them to collect,
 to fulfill their "Acquire Object" Need.
@@ -20,6 +20,9 @@ to fulfill their "Acquire Object" Need.
 This does not simple change the need.
 You need the have the Trinkets in your fortress and the dwarfs will
 go and collect their new Items.
+Setup:
+	-An stockpile full of trinkets 
+
 
 arguments:
     -t
@@ -30,21 +33,43 @@ arguments:
         Display this text
 
 ]===] 
-local verbose = false
 
-local aquire_need_id = 20 --20
-local aquire_threshold = -1000
 
---get all citizen
+--######
+--Helper
+--######
+
+function getAllCititzen()
 local citizen = {}
 local my_civ = df.global.world.world_data.active_site[0].entity_links[0].entity_id
 for n, unit in ipairs(df.global.world.units.all) do
-    if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
-        if unit.profession ~= df.profession.BABY and unit.profession ~= df.profession.CHILD then
-            table.insert(citizen, unit)
+        if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
+            if unit.profession ~= df.profession.BABY and unit.profession ~= df.profession.CHILD then
+                table.insert(citizen, unit)
+            end
         end
-    end
 end
+return citizen
+end
+local citizen = getAllCititzen()
+
+function findNeed(unit,need_id) 
+    local needs =  unit.status.current_soul.personality.needs
+    local need_index = -1
+    for k = #needs-1,0,-1 do
+        if needs[k].id == need_id then
+            need_index = k
+            break
+        end
+    end    if (need_index ~= -1 ) then 
+        return needs[need_index]
+    end
+    return nil
+end
+
+--######
+--Main
+--######
 
 
 function getFreeTrinkets() 
@@ -78,7 +103,6 @@ function getFreeTrinkets()
                 --end
         end
     end    
-    dfhack.println("need-acquire  | Giving out Free Trinkets: " .. item_count )
     return aquire_item_list
 end
 
@@ -91,7 +115,7 @@ function giveItems()
     local fullfilled_count = 0
     for i, unit in ipairs(citizen) do
         -- Find local need
-        local need = find_need(unit,aquire_need_id)
+        local need = findNeed(unit,aquire_need_id)
         if (need ~= nil ) then  
         if ( need.focus_level  < aquire_threshold ) then
             aquire_count = aquire_count+1        
@@ -107,33 +131,17 @@ function giveItems()
         end
     end
     dfhack.print("need-acquire  | Need: ".. aquire_count )
-    dfhack.print(" Fulfill: ".. fullfilled_count )
-    dfhack.println(" Missing: ".. missing_item_count )
+    dfhack.print(" Done: ".. fullfilled_count )
+    dfhack.println(" TODO: ".. missing_item_count )
     if (missing_item_count > 0) then
         dfhack.print("need-acquire  | ")
-        dfhack.color(12)
-        dfhack.println("Need " .. missing_item_count .. " more Trinkets to fulfill needs!")
-        dfhack.color(-1)
+        dfhack.printerr("Need " .. missing_item_count .. " more Trinkets to fulfill needs!")
     return 
     end                    
     
 end
 
 
-function find_need(unit,need_id) 
-    local needs =  unit.status.current_soul.personality.needs
-    local need_index = -1
-    for k = #needs-1,0,-1 do
-        if needs[k].id == need_id then
-            need_index = k
-            break
-        end
-    end
-    if (need_index ~= -1 ) then 
-        return needs[need_index]
-    end
-    return nil
-end
 
 if (args.help) then
     print(helpme)

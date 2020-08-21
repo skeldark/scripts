@@ -1,6 +1,8 @@
 -- need-religion.lua
-
+-- ver 0.9
 -- Limit Number of Religions a Dwarf can have
+--
+--
 
 local utils=require('utils')
 
@@ -9,10 +11,8 @@ validArgs = utils.invert({
     'test',
     'n'
 })
-
-local args = utils.processArgs({...}, validArgs)
-
 local deity_number = 3
+local args = utils.processArgs({...}, validArgs)
 local helpme = [===[
 Limit Number of Religions a Dwarf can have
 arguments:
@@ -22,18 +22,52 @@ arguments:
     -n
         Expects an integer value.
         Removes all Needs and social Connections above n deitys
-        "-n 3" is advisted for a balanced Gameplay and the default setting.
+        "-n 3" is advisted for a balanced Gameplay and the DEFAULT setting.
     -help 
         Display this text
 ]===] 
 
+--######
+--Helper
+--######
+
+function getAllCititzen()
+local citizen = {}
+local my_civ = df.global.world.world_data.active_site[0].entity_links[0].entity_id
+for n, unit in ipairs(df.global.world.units.all) do
+        if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
+            if unit.profession ~= df.profession.BABY and unit.profession ~= df.profession.CHILD then
+                table.insert(citizen, unit)
+            end
+        end
+end
+return citizen
+end
+local citizen = getAllCititzen()
+
+
+function findNeed(unit,need_id) 
+    local needs =  unit.status.current_soul.personality.needs
+    local need_index = -1
+    for k = #needs-1,0,-1 do
+        if needs[k].id == need_id then
+            need_index = k
+            break
+        end
+    end    if (need_index ~= -1 ) then 
+        return needs[need_index]
+    end
+    return nil
+end
+
+--######
+--Main
+--######
+
 
 function atest ()
     dfhack.println("TEST")
-    local my_civ = df.global.world.world_data.active_site[0].entity_links[0].entity_id
-    for i, unit in ipairs(df.global.world.units.all) do
-        if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
-     
+    for i, unit in ipairs(citizen) do
         -- Per citizen variables
         local count_needs = 0
         dfhack.print(dfhack.TranslateName(df.historical_figure.find(unit.hist_figure_id).name, true)) 
@@ -48,14 +82,12 @@ function atest ()
         
         local count_links = 0
         local hf = df.historical_figure.find(unit.hist_figure_id)
-         for k, histfig_link in ipairs(hf.histfig_links) do
+        for k, histfig_link in ipairs(hf.histfig_links) do
             if histfig_link._type == df.histfig_hf_link_deityst then
                 count_links = count_links + 1
             end
         end
         dfhack.println(" " .. count_links) 
-        
-        end
     end
 end
 
@@ -63,12 +95,8 @@ end
 
 
 function set_deities ()
-    dfhack.println("need-religion | Fixing to " .. deity_number .. " Religions" ) 
-    -- Get the local civ id 
-    local my_civ = df.global.world.world_data.active_site[0].entity_links[0].entity_id
     removed = 0
-    for i, unit in ipairs(df.global.world.units.all) do
-        if unit.civ_id == my_civ and dfhack.units.isCitizen(unit) then
+    for i, unit in ipairs(citizen) do
             count_needs = 0
             needs =  unit.status.current_soul.personality.needs
             hf = df.historical_figure.find(unit.hist_figure_id)    
@@ -84,7 +112,7 @@ function set_deities ()
                                         hf.histfig_links[k]:delete()
                                         hf.histfig_links:erase(k)
                                         found = 1
-					needs[j]:delete()
+										needs[j]:delete()
                                         needs:erase(j)
                                         break
                                     end
@@ -102,9 +130,8 @@ function set_deities ()
             dfhack.print("need-religion | " .. dfhack.TranslateName(df.historical_figure.find(unit.hist_figure_id).name, true))
             dfhack.println(failed .. " FAILED! Could not find Deity-Link!")
             end
-        end
     end
-    dfhack.println("need-religion | " .. removed .. " Religions and Deitylinks removed")
+    dfhack.println("need-religion | Max-Religion: " .. deity_number .. " Patched: " .. removed)
 end
 
 if (args.test) then
