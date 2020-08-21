@@ -87,22 +87,6 @@ end
 --Main
 --######
 
-
-function getByID(id) 
-	for n, unit in ipairs(citizen) do
-		if (unit.hist_figure_id == id) then
-			return unit
-		end
-		return nil
-	end
-end
-
-function needsTraining(unit) 
-
-	return true
-end
-
-
 -- Find all training squads
 -- Abort if no squads found
 function checkSquads()
