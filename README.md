@@ -4,11 +4,12 @@ Version: 0.9 BETA
 Download: https://github.com/skeldark/scripts/tree/master
 
 We know the Need system is quite bugged at the moment and it gets worse with the age of your fortress.
+
 In my opinion the Problem is, that dwarfs show no interest in fulfilling their needs them self.
 Its the players job to create the environment but its the dwarfs job to use this environment depending on his needs.
 E.g. Talk to a friend if you need to talk to a friend and don't listen to poetry that you feel 0 need for.
 
-So created some DFHack-scripts to fix/improve the Need and Stress System.
+So i created some DFHack-scripts to fix/improve the Need and Stress System.
 I did try to come up with not cheating solutions!
 Meaning i don't just change the Need-Values (well in most cases)
 
