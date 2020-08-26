@@ -23,7 +23,6 @@ go and collect their new Items.
 Setup:
 	-An stockpile full of trinkets 
 
-
 arguments:
     -t
         Expects an integer value.
@@ -61,7 +60,8 @@ function findNeed(unit,need_id)
             need_index = k
             break
         end
-    end    if (need_index ~= -1 ) then 
+    end    
+	if (need_index ~= -1 ) then 
         return needs[need_index]
     end
     return nil
@@ -138,10 +138,7 @@ function giveItems()
         dfhack.printerr("Need " .. missing_item_count .. " more Trinkets to fulfill needs!")
     return 
     end                    
-    
 end
-
-
 
 if (args.help) then
     print(helpme)
@@ -153,5 +150,3 @@ if (args.t) then
 end
 
 giveItems()
-
-
