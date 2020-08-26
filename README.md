@@ -34,19 +34,14 @@ There is a workaround to fill this need. You let all your dwarf carry Trinkets b
 I never liked this Goblin like behaviour.
 Instead my script assigns every Dwarf in need a Trinket.
 You still have to produce this Trinkets and the Dwarf still goes and collects his Trinket but he does it himself!
-
-4) Be with Friends / Be with Family (need-fuf.lua) (Static Script)
-I tried... But the Problem is so deep in the System i can not find an easy solution.
-Dwarfs just don't socialise enough and with the right persons. Even if you try to force them, its not enough to satisfy this needs.
-So here i just set the Need to 0. If you have a better idea let me know!
  
-5) Wander (need-wander.lua) (Labor-Script)
+4) Wander (need-wander.lua) (Labor-Script)
 Enables/Disables Pick/Gather Labor for anyone who needs to Wander.
 SETUP:
 	-An active gather Zone with plants/fruits to gather (best underground)	
 	-Dwarfs with "Alchemy Labor" are ignored
 
-6) Help Somebody (need-help.lua)  (Labor-Script)
+5) Help Somebody (need-help.lua)  (Labor-Script)
 Enables/Disables a Animal Care for anyone who needs to  Help Somebody
 SETUP:
 	-Gazeing Animals in Cages 
@@ -61,7 +56,7 @@ SETUP:
 	-Dwarfs with "Alchemy Labor" are ignored
 	
 	
-8) Training (need-training.lua) (Squad-Script)
+7) Training (need-training.lua) (Squad-Script)
 Assigns/Frees Dwarfs that needs to Train to Training-Squads
 SETUP: 
 	-Minimum 1 squad with the name "CIVGYM"
@@ -71,13 +66,19 @@ SETUP:
 	-Activate Training orders for this Squads ( Military/Alarms)
 	-Dwarfs with "Alchemy Labor" are ignored
 
-9) Need Value (need-value.lua) 
+8) Need Value (need-value.lua) 
 Outputs the average-need-value of your dwarfs.
 
 X) Autostarter ( need-all.lua )
 A script that runs the above scripts on timers.
 Just use  "need-all -start" and "need-all -stop" if you think they had enough.
 You could run it nonstop but i think its best if you use while on break/party to make the dwarfs happy.
+
+
+XXX) Be with Friends / Be with Family (need-fuf.lua) (Static Script) (CHEAT!)
+I tried... But the Problem is so deep in the System i can not find an easy solution.
+Dwarfs just don't socialise enough and with the right persons. Even if you try to force them, its not enough to satisfy this needs.
+So here i just set the Need to 0. If you have a better idea let me know!
 
 Hope someone finds it useful :)
 
