@@ -11,6 +11,7 @@ validArgs = utils.invert({
     'start',
     'stop',
     't',
+	'help'
 })
 local args = utils.processArgs({...}, validArgs)
 local scriptname = "need-wander"
@@ -134,7 +135,8 @@ function findNeed(unit,need_id)
             need_index = k
             break
         end
-    end    if (need_index ~= -1 ) then 
+    end    
+	if (need_index ~= -1 ) then 
         return needs[need_index]
     end
     return nil
@@ -205,8 +207,3 @@ if ( running ) then
 else
     dfhack.println(scriptname .."   | Disabled")
 end
-
-
-
-
-
