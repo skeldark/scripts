@@ -11,6 +11,7 @@ validArgs = utils.invert({
     'start',
     'stop',
     't',
+	'help'
 })
 local args = utils.processArgs({...}, validArgs)
 local scriptname = "need-help"
@@ -43,9 +44,6 @@ arguments:
         Expects an integer value.
         The negativ need  threshhold to trigger for each citizen
         Default is 3000
-        
-
-        
 ]===] 
 
 
@@ -84,7 +82,6 @@ function findSkill(unit,skill_id)
     end
     return nil
 end
-
 
 function switchLabor(unit,need_id,labor_id,need_threshold,skill_threshold)   
     local need = findNeed(unit,need_id)
@@ -137,7 +134,8 @@ function findNeed(unit,need_id)
             need_index = k
             break
         end
-    end    if (need_index ~= -1 ) then 
+    end    
+	if (need_index ~= -1 ) then 
         return needs[need_index]
     end
     return nil
@@ -208,9 +206,3 @@ if ( running ) then
 else
     dfhack.println(scriptname .."   | Disabled")
 end
-
-
-
-
-
-
