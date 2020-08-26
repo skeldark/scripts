@@ -18,13 +18,12 @@ local args = utils.processArgs({...}, validArgs)
 local scriptname = "need-craft"
 local repeat_time = 1000   --ticks
 local need_id = 13 
+local default_labor_id =  53  
 local count_todo = 0
 local ignore_flag= 30
 local ignore_count = 0
 local helpme = [===[
 Enables A craft Labor according to need Craft Something
-
-
 
 SETUP:
 	-Few Workshops for this Craft ( default stonecraft)
@@ -155,23 +154,18 @@ end
 --Main
 --######
 
-
-
-
-
 function start() 
     dfhack.println(scriptname .."    | START")
     if ( isOtherLaborScript()  ) then   return end
     -- Setting Global vars for future runs
 	threshold = -3000
-	labor_id =  53  
+	if (args.t) then threshold = 0-tonumber(args.t) end
+	labor_id = default_labor_id
     if (args.craftID) then labor_id = tonumber(args.craftID) end
-    if (args.t) then threshold = 0-tonumber(args.t) end
     running = true
 	--Set repeat task to check function
     repeatUtil.scheduleEvery(scriptname,repeat_time,'ticks',check)
 end
-
 
 function stop() 
 	-- disable all labors that this script enabled
@@ -183,8 +177,7 @@ function stop()
     repeatUtil.cancel(scriptname)
     dfhack.println(scriptname .."    | STOP" ) 
 end
-     
-	 
+
 function check() 
 	local count_active  = 0
     for i, unit in ipairs(citizen) do 
@@ -195,7 +188,6 @@ function check()
 	end
     dfhack.println(scriptname.."    | IGN: " .. ignore_count .. " TODO: " .. count_active)
 end
-
 
 if (args.help) then 
     print(helpme)
@@ -214,7 +206,3 @@ if (args.start) then
 end
 
 check()
-
-
-
-
