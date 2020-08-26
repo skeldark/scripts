@@ -10,6 +10,8 @@ local utils=require('utils')
 validArgs = utils.invert({
     'start',
     'stop',
+	't',
+	'help'
 })
 local args = utils.processArgs({...}, validArgs)
 local scriptname = "need-training"
@@ -24,7 +26,6 @@ Enables Milatary Training to fullfill Train need
 SETUP:
 		-Minimum 1 squad with the name "CIVGYM"
 		-An assigned squadleader that is good in teaching
-		-All other Places unassigned
 		-An assigned Barracks for this squads (best underground)
 		-Activ Training orders for this Squads
 		-Dwarfs with "Alchemy Labor" are ignored
@@ -86,6 +87,22 @@ end
 --######
 --Main
 --######
+
+
+function getByID(id) 
+	for n, unit in ipairs(citizen) do
+		if (unit.hist_figure_id == id) then
+			return unit
+		end
+		return nil
+	end
+end
+
+function needsTraining(unit) 
+
+	return true
+end
+
 
 -- Find all training squads
 -- Abort if no squads found
@@ -214,5 +231,3 @@ if ( running ) then
 else
     dfhack.println(scriptname .."   | Disabled")
 end
-
-
