@@ -1,5 +1,5 @@
 -- need-goodmeal.lua
--- ver 0.9
+-- ver 0.92
 -- Change the Preference of Food to a more broader range
 -- 
 --
@@ -9,9 +9,10 @@ local utils=require('utils')
 validArgs = utils.invert({
     'help',
     'undo',
-	'list'
+	'list',
+	'noseed'
 })
-local seed = false
+local seed = true
 local pss_counter=21416926
 local args = utils.processArgs({...}, validArgs)
 
@@ -25,7 +26,7 @@ CHEESE
 PLANT_GROWTH
 PLANT
 FISH
-[SEED] DEFAULT = off
+SEED 
 
 
 arguments:
@@ -33,9 +34,9 @@ arguments:
         Display this text
     -undo
         Removes the added Preferenzes again
-    -seed
-        DEFAULT = off
-        For extra "fun" include seed as a random Pref Categorie
+    -noseed
+		Disables Seed Categorie
+		If dwarfs are allready patched you want to -undo first 
 	-list 
 		List all dwarfs and their new Food Preference
 		Does not change them
@@ -67,7 +68,8 @@ function findNeed(unit,need_id)
             need_index = k
             break
         end
-    end    if (need_index ~= -1 ) then 
+    end    
+	if (need_index ~= -1 ) then 
         return needs[need_index]
     end
     return nil
@@ -165,8 +167,8 @@ if (args.help) then
     return
 end
 
-if (args.seed) then 
-    seed = true
+if (args.noseed) then 
+    seed = false
 end
 
 if (args.undo) then 
@@ -179,6 +181,4 @@ if (args.list) then
     return
 end
 
-
 selectFood()
-     
