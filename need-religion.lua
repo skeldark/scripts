@@ -45,7 +45,6 @@ return citizen
 end
 local citizen = getAllCititzen()
 
-
 function findNeed(unit,need_id) 
     local needs =  unit.status.current_soul.personality.needs
     local need_index = -1
@@ -63,7 +62,6 @@ end
 --######
 --Main
 --######
-
 
 function atest ()
     dfhack.println("TEST")
@@ -90,9 +88,6 @@ function atest ()
         dfhack.println(" " .. count_links) 
     end
 end
-
-
-
 
 function set_deities ()
     removed = 0
