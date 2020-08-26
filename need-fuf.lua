@@ -7,7 +7,7 @@
 utils=require('utils')
 
 validArgs = utils.invert({
-    'help',
+    'help'
 })
 local friend_need_id = 7
 local family_need_id = 8
@@ -52,7 +52,8 @@ function findNeed(unit,need_id)
             need_index = k
             break
         end
-    end    if (need_index ~= -1 ) then 
+    end    
+	if (need_index ~= -1 ) then 
         return needs[need_index]
     end
     return nil
@@ -92,7 +93,4 @@ if (args.help) then
     return
 end
 
-
 fulfill()
-
-
