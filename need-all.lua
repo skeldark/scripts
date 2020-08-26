@@ -11,7 +11,7 @@ local repeatUtil = require('repeat-util')
 validArgs = utils.invert({
     'start',
     'stop',
-    'help',
+    'help'
 })
 
 local args = utils.processArgs({...}, validArgs)
@@ -26,8 +26,6 @@ SETUP:
 	need-acquire
 		-An stockpile full of trinkets 
 	need-goodmeal
-		-No Setup needed
-	need_fuf 
 		-No Setup needed
 	need_wander
 		-An active gather Zone with plants/fruits to gather (best underground)
@@ -61,7 +59,7 @@ function stop()
     repeatUtil.cancel("need-religion")
     repeatUtil.cancel("need-acquire")
     repeatUtil.cancel("need-goodmeal")
-    repeatUtil.cancel("need_fuf")
+    --repeatUtil.cancel("need_fuf")
 	dfhack.run_command("need-help -stop")
 	dfhack.run_command("need-wander -stop")
 	dfhack.run_command("need-craft -stop")
@@ -76,7 +74,7 @@ function start()
     repeatUtil.scheduleUnlessAlreadyScheduled("need-religion",1,'months',run_need_religion)
     repeatUtil.scheduleUnlessAlreadyScheduled("need-acquire",3,'days',run_need_acquire)
     repeatUtil.scheduleUnlessAlreadyScheduled("need-goodmeal",1,'months',run_need_goodmeal)
-    repeatUtil.scheduleUnlessAlreadyScheduled("need_fuf",1,'months',run_need_fuf)
+    --repeatUtil.scheduleUnlessAlreadyScheduled("need_fuf",1,'months',run_need_fuf)
 	dfhack.run_command("need-help -start")
 	dfhack.run_command("need-wander -start")
 	dfhack.run_command("need-craft -start")
@@ -107,14 +105,12 @@ if (args.help) then
     print(helpme)
     return
 end
-    
-	
+
 if (args.stop) then
     if (running) then stop() end
     running = false
     return
 end 
-
 
 if (args.start) then
     if ( running ) then stop() end
@@ -122,7 +118,6 @@ if (args.start) then
     running = true    
     return
 end
-
 
 if ( running ) then
 	dfhack.println("use -help for help")
